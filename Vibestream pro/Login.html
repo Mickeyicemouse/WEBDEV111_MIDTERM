@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white;
+    background-image: url("bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.login-container {
+    background-color: #181818;
+    padding: 40px;
+    width: 350px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+h2 {
+    margin-bottom: 25px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    font-size: 13px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 5px;
+    border: none;
+    background-color: #282828;
+    color: white;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #1DB954;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="login-container">
+    <div class="logo">Sounds about right</div>
+    <h2>Log in to continue</h2>
+
+    <form id="loginForm">
+        <div class="input-group">
+            <label>Email or Username</label>
+            <input type="text" id="username" required>
+        </div>
+
+        <div class="input-group">
+            <label>Password</label>
+            <input type="password" id="password" required>
+        </div>
+
+        <button class="login-btn" type="submit">LOG IN</button>
+    </form>
+</div>
+
+<script>
+document.getElementById("loginForm").addEventListener("submit", function(event) {
+    event.preventDefault(); 
+
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+
+    if (username !== "" && password !== "") {
+        window.location.href = "home.html";
+    } else {
+        alert("Please enter login information.");
+    }
+});
+</script>
+
+</body>
+</html>

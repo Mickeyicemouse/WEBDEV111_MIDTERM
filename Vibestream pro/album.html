@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Album</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    display:flex;
+    height:100vh;
+    background:#121212;
+    color:white;
+    background-image: url("bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.sidebar{
+    width:220px;
+    background:#000;
+    padding:20px;
+}
+
+.sidebar h2{
+    margin-bottom:30px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar li{
+    margin:15px 0;
+    color:#b3b3b3;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.sidebar li:hover{
+    color:white;
+}
+
+.main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+.topbar{
+    height:60px;
+    background:#101010;
+    display:flex;
+    align-items:center;
+    padding:0 20px;
+}
+
+.nav-btn{
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    border:none;
+    background:#000;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+    margin-right:20px;
+    transition:all 0.25s ease;
+}
+
+.nav-btn:hover{
+    background:#1DB954;
+    color:black;
+    box-shadow:0 0 10px #1DB954;
+    transform:scale(1.1);
+}
+
+.album-header img{
+    width:200px;
+    box-shadow:0 0 20px rgba(0,0,0,0.6);
+}
+
+.album-info small{
+    text-transform:uppercase;
+    font-size:12px;
+    color:#ccc;
+}
+
+.album-info h1{
+    font-size:48px;
+    margin:10px 0;
+}
+
+.album-info p{
+    color:#ccc;
+}
+
+.play-section{
+    padding:20px 40px;
+}
+
+.play-btn{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:#1DB954;
+    border:none;
+    font-size:22px;
+    cursor:pointer;
+}
+
+.song-list{
+    padding:0 40px;
+    overflow-y:auto;
+    flex:1;
+}
+
+.song-row{
+    display:grid;
+    grid-template-columns:40px 1fr 80px;
+    padding:12px 0;
+    border-bottom:1px solid #222;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.song-row:hover{
+    background:#1a1a1a;
+}
+
+.player{
+    height:80px;
+    background:#181818;
+    border-top:1px solid #333;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 30px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Sounds about right</h2>
+    <ul>
+        <li onclick="goHome()">Home</li>
+    </ul>
+</div>
+
+<div class="main">
+
+    <div class="topbar">
+        <button class="nav-btn" onclick="goHome()">❮</button>
+    </div>
+
+    <div class="album-header">
+        <img id="albumCover">
+        <div class="album-info">
+            <small>Album</small>
+            <h1 id="albumTitle"></h1>
+            <p id="albumMeta"></p>
+        </div>
+    </div>
+
+    <div class="play-section">
+        <button class="play-btn" onclick="playFirst()">▶</button>
+    </div>
+
+    <div class="song-list" id="songList"></div>
+
+    <div class="player">
+        <div id="nowPlaying">No song playing</div>
+        <button onclick="togglePlay()">Pause</button>
+    </div>
+
+</div>
+
+<audio id="audio"></audio>
+
+<script>
+
+let audio = document.getElementById("audio");
+let songList = document.getElementById("songList");
+let nowPlaying = document.getElementById("nowPlaying");
+
+const albums = {
+
+    Chromakropia: {
+        title: "Chromakropia",
+        cover: "images (1).jpeg",
+        artist: "Tyler, The Creator",
+        year: "2024",
+        tracks: [
+            {title:"ST. CHROMA", duration:"3:17", src:"ST. CHROMA.mp3"},
+            {title:"Rah Tah Tah", duration:"2:45", src:"Rah Tah Tah.mp3"},
+            {title:"DARLING, I", duration:"4:44", src:"DARLING, I (Official Video).mp3"},
+            {title:"Hey Jane", duration:"3:30", src:"Hey Jane.mp3"},
+            {title:"I Killed You", duration:"2:37", src:"I Killed You.mp3"},
+            {title:"Sticky (feat. GloRilla, Sexyy Red & Lil Wayne)", duration:"2:37", src:"Sticky.mp3"},
+            {title:"Tomorrow", duration:"3:02", src:"Tomorrow.mp3"},
+            {title:"Like Him", duration:"4:38", src:"Like Him.mp3"}
+        ]
+    },
+
+    GNX: {
+        title: "GNX",
+        cover: "gnxalbum.jpeg",
+        artist: "Kendrick Lamar",
+        year: "2024",
+        tracks: [
+            {title:"Squabble Up", duration:"2:37", src:"squabble up.mp3"},
+            {title:"Wacced Out Murals", duration:"5:17", src:"wacced out murals.mp3"},
+            {title:"Peekaboo", duration:"2:35", src:"peekaboo.mp3"},
+            {title:"TV Off", duration:"3:40", src:"tv off.mp3"},
+            {title:"Heart Pt. 6", duration:"4:52", src:"heart pt 6.mp3"}
+        ]
+    }
+
+};
+
+const params = new URLSearchParams(window.location.search);
+const selectedAlbum = params.get("album");
+
+if(albums[selectedAlbum]){
+    loadAlbum(albums[selectedAlbum]);
+}
+
+function loadAlbum(album){
+    document.getElementById("albumTitle").textContent = album.title;
+    document.getElementById("albumCover").src = album.cover;
+    document.getElementById("albumMeta").textContent =
+        album.artist + " • " + album.year + " • " + album.tracks.length + " songs";
+
+    songList.innerHTML = "";
+
+    album.tracks.forEach((track, index)=>{
+        let row = document.createElement("div");
+        row.className = "song-row";
+        row.innerHTML = `
+            <div>${index+1}</div>
+            <div>${track.title}</div>
+            <div>${track.duration}</div>
+        `;
+        row.onclick = ()=> playSong(track.title, track.src);
+        songList.appendChild(row);
+    });
+
+    window.currentTracks = album.tracks;
+}
+
+function playSong(title, src){
+    audio.src = src;
+    audio.play();
+    nowPlaying.textContent = "Now Playing: " + title;
+}
+
+function playFirst(){
+    if(window.currentTracks){
+        playSong(window.currentTracks[0].title, window.currentTracks[0].src);
+    }
+}
+
+function togglePlay(){
+    if(audio.paused){
+        audio.play();
+    } else{
+        audio.pause();
+    }
+}
+
+function goHome(){
+    window.location.href = "home.html";
+}
+
+</script>
+
+</body>
+</html>

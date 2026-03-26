@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Homepage</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    background-color: #121212;
+    color: white;
+    background-image: url("bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+.sidebar {
+    width: 220px;
+    background-color: #000;
+    padding: 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin: 15px 0;
+    color: #b3b3b3;
+    cursor: pointer;
+}
+
+.sidebar ul li:hover {
+    color: white;
+}
+
+.main {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+.album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+}
+
+.album-card {
+    background-color: #181818;
+    padding: 15px;
+    border-radius: 8px;
+    transition: 0.3s ease;
+    cursor: pointer;
+}
+
+.album-card:hover {
+    background-color: #282828;
+}
+
+.album-card img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.album-card h3 {
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+.album-card p {
+    font-size: 13px;
+    color: #b3b3b3;
+    margin-top: 5px;
+}
+
+.play-btn {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+    background-color: #1DB954;
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Sounds about right</h2>
+    <ul>
+        <li>Home</li>
+    </ul>
+</div>
+
+<div class="main">
+    <h1>Featured Albums</h1>
+
+    <div class="album-grid">
+
+        <div class="album-card">
+            <img src="images (1).jpeg">
+            <h3>Chromakropia</h3>
+            <button class="play-btn"
+                onclick="goToAlbum('Chromakropia')">
+                Play
+            </button>
+        </div>
+
+        <div class="album-card">
+            <img src="gnxalbum.jpeg">
+            <h3>GNX</h3>
+            <button class="play-btn"
+                onclick="goToAlbum('GNX')">
+                Play
+            </button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function goToAlbum(albumName) {
+    window.location.href = "album.html?album=" + albumName;
+}
+</script>
+
+</body>
+</html>
